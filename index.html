@@ -90,7 +90,8 @@
         display: flex !important;
       }
     </style>
-    <meta property="og:image" content="https://myhomep.pages.dev/profile.jpg" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&h=630&auto=format&fit=crop&q=80" />
+
   </head>
   <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-600 selection:text-white">
     <!-- Subtle Background Ambient Glow -->
@@ -2003,6 +2004,27 @@
       // ----------------------------------------------------
       // 0. Admin Access Control & Security Layer (소유자 전용 수정 잠금)
       // ----------------------------------------------------
+      // ===== 데이터 버전 관리 (이전 localStorage 데이터 자동 초기화) =====
+
+      const APP_DATA_VERSION = '2026-09-13-v1';
+      (function checkDataVersion() {
+        try {
+          const storedVersion = localStorage.getItem('app_data_version');
+          if (storedVersion !== APP_DATA_VERSION) {
+            // 이전 버전의 모든 프로필 데이터 삭제 → 새 기본값 사용
+            localStorage.removeItem('profile_author_info');
+            localStorage.removeItem('profile_name');
+            localStorage.removeItem('profile_image');
+            localStorage.removeItem('profile_careers');
+            localStorage.removeItem('profile_custom_sections');
+            localStorage.removeItem('profile_webapps');
+            localStorage.setItem('app_data_version', APP_DATA_VERSION);
+          }
+        } catch (e) {
+          console.warn('데이터 버전 확인 실패:', e);
+        }
+      })();
+
       const ADMIN_STORAGE_KEY = 'is_admin_mode';
       const ADMIN_PWD_KEY = 'admin_site_password';
       const DEFAULT_ADMIN_PWD = 'admin1234';
