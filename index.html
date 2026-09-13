@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>엔지니 미니 홈페이지</title>
-    <meta name="description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 킹왕짱 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
-    <meta property="og:title" content="킹왕짱 미니 홈페이지" />
-    <meta property="og:description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 킹왕짱 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
+    <meta name="description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
+    <meta property="og:title" content="엔지니 미니 홈페이지" />
+    <meta property="og:description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -185,8 +185,17 @@
           <!-- Name Display Mode -->
           <div id="name-display-wrap" class="flex items-center gap-2 group cursor-pointer" onclick="handleNameClick()">
             <h1 id="profile-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
-              킹왕짱
             </h1>
+            <script>
+              (function () {
+                try {
+                  var savedName = localStorage.getItem('profile_name');
+                  document.getElementById('profile-name').textContent = savedName || '엔지니';
+                } catch (e) {
+                  document.getElementById('profile-name').textContent = '엔지니';
+                }
+              })();
+            </script>
             <button
               id="edit-name-btn"
               type="button"
@@ -459,7 +468,7 @@
 
       <!-- Footer with Discrete Admin Lock Button -->
       <footer class="mt-auto pt-6 pb-4 text-center text-xs text-slate-400 border-t border-slate-900 flex flex-col items-center gap-2">
-        <p>© 2026 <span id="footer-name">킹왕짱</span>. Designed with Indigo Minimalist & Tailwind CSS.</p>
+        <p>© 2026 <span id="footer-name"></span>. Designed with Indigo Minimalist & Tailwind CSS.</p>
         <button
           id="footer-admin-btn"
           type="button"
@@ -496,7 +505,7 @@
               AI 비서
               <span class="px-1.5 py-0.2 rounded text-[10px] font-normal bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Assistant</span>
             </h3>
-            <p id="chat-subtitle" class="text-[11px] text-slate-400"><span id="chat-owner-name">킹왕짱</span>에 대해 무엇이든 물어보세요</p>
+            <p id="chat-subtitle" class="text-[11px] text-slate-400"><span id="chat-owner-name"></span>에 대해 무엇이든 물어보세요</p>
           </div>
         </div>
         <button
@@ -519,7 +528,7 @@
           </div>
           <div class="bg-slate-800/90 text-slate-200 p-3 rounded-2xl rounded-tl-sm border border-slate-700/60 max-w-[85%] leading-relaxed shadow-sm">
             <p class="text-xs sm:text-sm">
-              안녕하세요! <span id="welcome-name" class="font-bold text-indigo-300">킹왕짱</span> 크리에이터의 AI 비서입니다. 궁금한 점이 있으시면 아래 추천 질문을 누르거나 직접 메시지를 남겨주세요. ✨
+              안녕하세요! <span id="welcome-name" class="font-bold text-indigo-300"></span> 크리에이터의 AI 비서입니다. 궁금한 점이 있으시면 아래 추천 질문을 누르거나 직접 메시지를 남겨주세요. ✨
             </p>
           </div>
         </div>
@@ -1470,7 +1479,7 @@
                 id="author-name-input"
                 required
                 maxlength="20"
-                placeholder="예: 킹왕짱, 홍길동"
+                placeholder="예: 엔지니, 홍길동"
                 class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
               >
             </div>
@@ -2289,7 +2298,7 @@
       // 1. Dynamic Author Information & Bio Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_AUTHOR_INFO = {
-        name: '킹왕짱',
+        name: '',
         role: 'Creator',
         oneLineBio: 'AI 기술을 활용해 유용한 도구를 만드는 크리에이터입니다.',
         aboutTitle: '자기소개',
@@ -2320,7 +2329,7 @@
       if (legacyName) {
         authorInfo.name = legacyName;
       }
-      let currentProfileName = authorInfo.name || '킹왕짱';
+      let currentProfileName = authorInfo.name || '';
 
       function updateProfileNameInUI(name) {
         currentProfileName = name;
