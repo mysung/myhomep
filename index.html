@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>킹왕짱 미니 홈페이지</title>
+    <title>엔지니 미니 홈페이지</title>
     <meta name="description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 킹왕짱 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
     <meta property="og:title" content="킹왕짱 미니 홈페이지" />
     <meta property="og:description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 킹왕짱 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
@@ -140,10 +140,21 @@
           <div class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
             <img
               id="profile-img"
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+              src=""
               alt="프로필 사진"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
             />
+            <script>
+              (function () {
+                try {
+                  var saved = localStorage.getItem('profile_image');
+                  if (saved) {
+                    document.getElementById('profile-img').src = saved;
+                  }
+                } catch (e) {}
+              })();
+            </script>
+
             <!-- Hover Overlay (Admin Only) -->
             <div class="admin-only absolute inset-1 rounded-full bg-slate-950/65 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white backdrop-blur-[2px]">
               <i class="fa-solid fa-camera text-xl mb-1 text-indigo-300"></i>
@@ -991,7 +1002,7 @@
           <div class="relative w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/30">
             <img
               id="avatar-modal-preview"
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+              src=""
               alt="프로필 미리보기"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
             />
