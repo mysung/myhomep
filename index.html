@@ -102,31 +102,26 @@
       }
     </style>
     <script>
-      // ===== 데이터 버전 관리 (이전 localStorage 데이터 자동 초기화 및 GitHub public/profile.jpg 기본 적용) =====
+      // ===== 데이터 버전 관리 (이전 localStorage 데이터 자동 초기화 및 public/face.jpg 강제 적용) =====
       // 반드시 body의 인라인 스크립트보다 먼저 실행되어야 함
       (function checkDataVersion() {
         try {
-          var APP_DATA_VERSION = '2026-09-14-v5';
+          var APP_DATA_VERSION = '2026-09-14-v10';
           var storedVersion = localStorage.getItem('app_data_version');
           var savedAvatar = localStorage.getItem('profile_image');
-          if (savedAvatar && (savedAvatar.indexOf('unsplash.com') !== -1 || savedAvatar.indexOf('photo-1534528741775') !== -1)) {
+          // 이전 버전이거나 profile.jpg, unsplash 등 이전 기본값이 저장되어 있는 경우 public/face.jpg로 강제 초기화
+          if (storedVersion !== APP_DATA_VERSION || (savedAvatar && (
+            savedAvatar.indexOf('unsplash.com') !== -1 ||
+            savedAvatar.indexOf('photo-1534528741775') !== -1 ||
+            savedAvatar.indexOf('profile.jpg') !== -1
+          ))) {
             localStorage.removeItem('profile_image');
           }
-          var savedCareers = localStorage.getItem('profile_careers');
-          if (savedCareers && (savedCareers.indexOf('career-default-3') !== -1 || savedCareers.indexOf('웹 인터랙션 디자이너') !== -1)) {
-            try {
-              var parsedCareers = JSON.parse(savedCareers);
-              if (Array.isArray(parsedCareers)) {
-                var cleanedCareers = parsedCareers.filter(function(c) {
-                  return c.id !== 'career-default-3' && c.title !== '웹 인터랙션 디자이너 & 개발자';
-                });
-                localStorage.setItem('profile_careers', JSON.stringify(cleanedCareers));
-              }
-            } catch (err) {}
-          }
+          // 주요 경력 최신 데이터로 동기화
           if (storedVersion !== APP_DATA_VERSION) {
-            localStorage.setItem('app_data_version', APP_DATA_VERSION);
+            localStorage.removeItem('profile_careers');
           }
+          localStorage.setItem('app_data_version', APP_DATA_VERSION);
         } catch (e) {
           console.warn('데이터 버전 확인 실패:', e);
         }
@@ -183,19 +178,19 @@
           <div class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
             <img
               id="profile-img"
-              src="public/profile.jpg"
-              alt="프로필 사진"
+              src="public/face.jpg"
+              alt="엔지니 프로필 사진"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
-              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='/profile.jpg';}else if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
+              onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='/face.jpg';}else if(this.src!=='https://myhomep.pages.dev/face.jpg'){this.src='https://myhomep.pages.dev/face.jpg';}"
             />
             <script>
               (function () {
                 try {
                   var saved = localStorage.getItem('profile_image');
-                  if (saved && saved.indexOf('unsplash.com') === -1) {
+                  if (saved && saved.indexOf('unsplash.com') === -1 && saved.indexOf('profile.jpg') === -1 && saved.indexOf('face.jpg') === -1) {
                     document.getElementById('profile-img').src = saved;
                   } else {
-                    document.getElementById('profile-img').src = 'public/profile.jpg';
+                    document.getElementById('profile-img').src = 'public/face.jpg';
                   }
                 } catch (e) {}
               })();
@@ -1057,10 +1052,10 @@
           <div class="relative w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/30">
             <img
               id="avatar-modal-preview"
-              src="public/profile.jpg"
+              src="public/face.jpg"
               alt="프로필 미리보기"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
-              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='/profile.jpg';}else if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
+              onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='/face.jpg';}else if(this.src!=='https://myhomep.pages.dev/face.jpg'){this.src='https://myhomep.pages.dev/face.jpg';}"
             />
           </div>
           <span class="text-[11px] text-slate-400 font-medium">현재 프로필 사진 미리보기</span>
@@ -1122,11 +1117,19 @@
           <div class="grid grid-cols-5 gap-2">
             <button
               type="button"
+              onclick="selectPresetAvatar('public/face.jpg')"
+              class="relative aspect-square rounded-xl overflow-hidden border-2 border-slate-700 hover:border-indigo-500 focus:border-indigo-500 transition-all hover:scale-105 cursor-pointer"
+              title="상단 얼굴 사진 (public/face.jpg)"
+            >
+              <img src="public/face.jpg" alt="상단 얼굴 사진" class="w-full h-full object-cover" onerror="if(this.src.indexOf('pages.dev')===-1){this.src='https://myhomep.pages.dev/face.jpg';}">
+            </button>
+            <button
+              type="button"
               onclick="selectPresetAvatar('public/profile.jpg')"
               class="relative aspect-square rounded-xl overflow-hidden border-2 border-slate-700 hover:border-indigo-500 focus:border-indigo-500 transition-all hover:scale-105 cursor-pointer"
-              title="GitHub 대표 사진 (public/profile.jpg)"
+              title="링크 대문 사진 (public/profile.jpg)"
             >
-              <img src="public/profile.jpg" alt="GitHub 대표 사진" class="w-full h-full object-cover" onerror="this.src='/profile.jpg'">
+              <img src="public/profile.jpg" alt="링크 대문 사진" class="w-full h-full object-cover" onerror="this.src='/profile.jpg'">
             </button>
             <button
               type="button"
@@ -2880,11 +2883,11 @@
       // ----------------------------------------------------
       // 1-2. Dynamic Profile Photo Management (Local Storage & Upload)
       // ----------------------------------------------------
-      const DEFAULT_AVATAR = 'public/profile.jpg';
+      const DEFAULT_AVATAR = 'public/face.jpg';
       let currentProfileAvatar = (function() {
         try {
           const saved = localStorage.getItem('profile_image');
-          if (saved && !saved.includes('unsplash.com') && !saved.includes('photo-1534528741775')) {
+          if (saved && !saved.includes('unsplash.com') && !saved.includes('photo-1534528741775') && !saved.includes('profile.jpg') && !saved.includes('face.jpg')) {
             return saved;
           }
         } catch (e) {}
@@ -3021,7 +3024,7 @@
 
         localStorage.removeItem('profile_image');
         updateProfileAvatarInUI(DEFAULT_AVATAR);
-        showToast('대표 프로필 사진(public/profile.jpg)으로 복원되었습니다. 🔄');
+        showToast('상단 프로필 사진(public/face.jpg)으로 복원되었습니다. 🔄');
         closeAvatarModal();
       }
 
@@ -3067,17 +3070,25 @@
         {
           id: 'career-default-1',
           title: 'AI 솔루션 & 인터랙션 개발 리드',
-          period: '2023 - 현재',
-          company: '프리랜서 & 크리에이터 스튜디오',
-          desc: '생성형 AI API와 최신 웹 기술을 결합한 경량형 비즈니스 유틸리티 기획 및 프로덕트 구축.',
+          period: '2024 ~ 현재',
+          company: 'AI & Web Architecture',
+          desc: '생성형 AI API와 최신 웹 기술을 결합한 경량형 비즈니스 유틸리티 기획 및 프로덕트 구축',
           isCurrent: true
         },
         {
           id: 'career-default-2',
-          title: '시니어 프론트엔드 엔지니어',
-          period: '2021 - 2023',
-          company: '테크 스타트업 플랫폼 팀',
-          desc: '반응형 디자인 시스템 설계, 컴포넌트 라이브러리 제작 및 핵심 사용자 대시보드 성능 최적화(Lighthouse 95+).',
+          title: '시니어 보안 엔지니어',
+          period: '2024 ~ 현재',
+          company: 'Security & AI Defense',
+          desc: '사이버 보안 실전 진단 및 AI 보안 솔루션 개발',
+          isCurrent: true
+        },
+        {
+          id: 'career-default-3',
+          title: '컴퓨터공학 교육 & 연구',
+          period: '1993 ~ 2024',
+          company: 'Education & Research Lab',
+          desc: 'OS, LINUX, AI, DS, Haptic VR',
           isCurrent: false
         }
       ];
@@ -3088,13 +3099,7 @@
           if (stored) {
             const parsed = JSON.parse(stored);
             if (Array.isArray(parsed) && parsed.length > 0) {
-              const filtered = parsed.filter(c => c.id !== 'career-default-3' && c.title !== '웹 인터랙션 디자이너 & 개발자');
-              if (filtered.length !== parsed.length) {
-                try {
-                  localStorage.setItem('profile_careers', JSON.stringify(filtered));
-                } catch (e) {}
-              }
-              return filtered;
+              return parsed;
             }
           }
         } catch (e) {
@@ -3205,10 +3210,11 @@
                   </div>
                 </div>
 
+                ${item.company ? `
                 <p class="text-xs text-indigo-400/90 font-medium mb-2 flex items-center gap-1.5">
                   <i class="fa-solid fa-building text-[11px] text-slate-500"></i>
                   <span>${escapeHtml(item.company)}</span>
-                </p>
+                </p>` : ''}
 
                 <p class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
                   ${escapeHtml(item.desc)}
