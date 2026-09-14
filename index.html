@@ -102,15 +102,27 @@
       }
     </style>
     <script>
-      // ===== 데이터 버전 관리 (이전 localStorage 데이터 자동 초기화 및 Unsplash 캐시 제거) =====
+      // ===== 데이터 버전 관리 (이전 localStorage 데이터 자동 초기화 및 GitHub public/profile.jpg 기본 적용) =====
       // 반드시 body의 인라인 스크립트보다 먼저 실행되어야 함
       (function checkDataVersion() {
         try {
-          var APP_DATA_VERSION = '2026-09-14-v1';
+          var APP_DATA_VERSION = '2026-09-14-v5';
           var storedVersion = localStorage.getItem('app_data_version');
           var savedAvatar = localStorage.getItem('profile_image');
           if (savedAvatar && (savedAvatar.indexOf('unsplash.com') !== -1 || savedAvatar.indexOf('photo-1534528741775') !== -1)) {
             localStorage.removeItem('profile_image');
+          }
+          var savedCareers = localStorage.getItem('profile_careers');
+          if (savedCareers && (savedCareers.indexOf('career-default-3') !== -1 || savedCareers.indexOf('웹 인터랙션 디자이너') !== -1)) {
+            try {
+              var parsedCareers = JSON.parse(savedCareers);
+              if (Array.isArray(parsedCareers)) {
+                var cleanedCareers = parsedCareers.filter(function(c) {
+                  return c.id !== 'career-default-3' && c.title !== '웹 인터랙션 디자이너 & 개발자';
+                });
+                localStorage.setItem('profile_careers', JSON.stringify(cleanedCareers));
+              }
+            } catch (err) {}
           }
           if (storedVersion !== APP_DATA_VERSION) {
             localStorage.setItem('app_data_version', APP_DATA_VERSION);
@@ -171,10 +183,10 @@
           <div class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
             <img
               id="profile-img"
-              src="/profile.jpg"
+              src="public/profile.jpg"
               alt="프로필 사진"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
-              onerror="if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
+              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='/profile.jpg';}else if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
             />
             <script>
               (function () {
@@ -183,7 +195,7 @@
                   if (saved && saved.indexOf('unsplash.com') === -1) {
                     document.getElementById('profile-img').src = saved;
                   } else {
-                    document.getElementById('profile-img').src = '/profile.jpg';
+                    document.getElementById('profile-img').src = 'public/profile.jpg';
                   }
                 } catch (e) {}
               })();
@@ -1045,10 +1057,10 @@
           <div class="relative w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-700 shadow-xl shadow-indigo-600/30">
             <img
               id="avatar-modal-preview"
-              src="/profile.jpg"
+              src="public/profile.jpg"
               alt="프로필 미리보기"
               class="w-full h-full object-cover rounded-full bg-slate-800 border-2 border-slate-950"
-              onerror="if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
+              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='/profile.jpg';}else if(this.src!=='https://myhomep.pages.dev/profile.jpg'){this.src='https://myhomep.pages.dev/profile.jpg';}"
             />
           </div>
           <span class="text-[11px] text-slate-400 font-medium">현재 프로필 사진 미리보기</span>
@@ -1110,11 +1122,11 @@
           <div class="grid grid-cols-5 gap-2">
             <button
               type="button"
-              onclick="selectPresetAvatar('/profile.jpg')"
+              onclick="selectPresetAvatar('public/profile.jpg')"
               class="relative aspect-square rounded-xl overflow-hidden border-2 border-slate-700 hover:border-indigo-500 focus:border-indigo-500 transition-all hover:scale-105 cursor-pointer"
-              title="대표 사진 (profile.jpg)"
+              title="GitHub 대표 사진 (public/profile.jpg)"
             >
-              <img src="/profile.jpg" alt="대표 사진" class="w-full h-full object-cover" onerror="this.src='https://myhomep.pages.dev/profile.jpg'">
+              <img src="public/profile.jpg" alt="GitHub 대표 사진" class="w-full h-full object-cover" onerror="this.src='/profile.jpg'">
             </button>
             <button
               type="button"
@@ -1285,21 +1297,35 @@
           </div>
 
           <!-- Modal Footer Buttons -->
-          <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onclick="closeCareerModal()"
-              class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
-            >
-              취소
-            </button>
-            <button
-              type="submit"
-              class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
-            >
-              <i class="fa-solid fa-check text-xs"></i>
-              <span>저장하기</span>
-            </button>
+          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <button
+                type="button"
+                id="career-delete-btn"
+                onclick="handleCareerDeleteClick()"
+                class="px-3.5 py-2.5 rounded-xl bg-rose-500/15 hover:bg-rose-600 text-rose-400 hover:text-white text-xs font-semibold border border-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
+                style="display: none;"
+              >
+                <i class="fa-solid fa-trash text-xs"></i>
+                <span>이 경력 삭제</span>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                onclick="closeCareerModal()"
+                class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <i class="fa-solid fa-check text-xs"></i>
+                <span>저장하기</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -2854,7 +2880,7 @@
       // ----------------------------------------------------
       // 1-2. Dynamic Profile Photo Management (Local Storage & Upload)
       // ----------------------------------------------------
-      const DEFAULT_AVATAR = '/profile.jpg';
+      const DEFAULT_AVATAR = 'public/profile.jpg';
       let currentProfileAvatar = (function() {
         try {
           const saved = localStorage.getItem('profile_image');
@@ -2995,7 +3021,7 @@
 
         localStorage.removeItem('profile_image');
         updateProfileAvatarInUI(DEFAULT_AVATAR);
-        showToast('대표 프로필 사진(profile.jpg)으로 복원되었습니다. 🔄');
+        showToast('대표 프로필 사진(public/profile.jpg)으로 복원되었습니다. 🔄');
         closeAvatarModal();
       }
 
@@ -3053,14 +3079,6 @@
           company: '테크 스타트업 플랫폼 팀',
           desc: '반응형 디자인 시스템 설계, 컴포넌트 라이브러리 제작 및 핵심 사용자 대시보드 성능 최적화(Lighthouse 95+).',
           isCurrent: false
-        },
-        {
-          id: 'career-default-3',
-          title: '웹 인터랙션 디자이너 & 개발자',
-          period: '2019 - 2021',
-          company: '디지털 에이전시',
-          desc: '브랜드 인터랙티브 마이크로사이트 제작, 마이크로 인터랙션 및 모바일 최적화 웹 경험 구축.',
-          isCurrent: false
         }
       ];
 
@@ -3070,7 +3088,13 @@
           if (stored) {
             const parsed = JSON.parse(stored);
             if (Array.isArray(parsed) && parsed.length > 0) {
-              return parsed;
+              const filtered = parsed.filter(c => c.id !== 'career-default-3' && c.title !== '웹 인터랙션 디자이너 & 개발자');
+              if (filtered.length !== parsed.length) {
+                try {
+                  localStorage.setItem('profile_careers', JSON.stringify(filtered));
+                } catch (e) {}
+              }
+              return filtered;
             }
           }
         } catch (e) {
@@ -3210,6 +3234,8 @@
 
         if (!modal || !box) return;
 
+        const deleteBtn = document.getElementById('career-delete-btn');
+
         if (id) {
           const item = careerList.find(c => c.id === id);
           if (item) {
@@ -3220,6 +3246,7 @@
             companyInput.value = item.company;
             currentCheck.checked = !!item.isCurrent;
             descInput.value = item.desc;
+            if (deleteBtn) deleteBtn.style.display = 'inline-flex';
           }
         } else {
           titleEl.textContent = '새 경력 추가';
@@ -3229,6 +3256,7 @@
           companyInput.value = '';
           currentCheck.checked = false;
           descInput.value = '';
+          if (deleteBtn) deleteBtn.style.display = 'none';
         }
 
         modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -3255,6 +3283,15 @@
       function handleCareerModalBackdropClick(e) {
         if (e.target.id === 'career-modal') {
           closeCareerModal();
+        }
+      }
+
+      function handleCareerDeleteClick() {
+        if (!verifyAdminOrPrompt()) return;
+        const idInput = document.getElementById('career-id');
+        const id = idInput ? idInput.value : '';
+        if (id) {
+          deleteCareer(id);
         }
       }
 
@@ -3304,9 +3341,10 @@
         const item = careerList.find(c => c.id === id);
         const name = item ? item.title : '이 경력';
         if (confirm(`"${name}" 항목을 삭제하시겠습니까?`)) {
+          closeCareerModal();
           const updated = careerList.filter(c => c.id !== id);
           saveCareers(updated);
-          showToast('경력 항목이 삭제되었습니다. 🗑️');
+          showToast(`"${name}" 항목이 삭제되었습니다. 🗑️`);
         }
       }
 
