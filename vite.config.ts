@@ -151,11 +151,12 @@ function saveContentPlugin(): Plugin {
                 );
               }
 
-              // 7. Update DEFAULT_ADMIN_PWD (specifically the declaration: const DEFAULT_ADMIN_PWD = '...';)
-              if (data.adminPassword) {
+              // 7. Update DEFAULT_ADMIN_PWD_HASH (평문이 아닌 SHA-256 해시값만 저장)
+              const pwdHashToSave = data.adminPasswordHash || (data.adminPassword && data.adminPassword.length === 64 ? data.adminPassword : null);
+              if (pwdHashToSave) {
                 html = html.replace(
-                  /(^[ \t]*const DEFAULT_ADMIN_PWD = )['"].*?['"];/m,
-                  `$1'${data.adminPassword}';`
+                  /(^[ \t]*const DEFAULT_ADMIN_PWD_HASH = )['"].*?['"];/m,
+                  `$1'${pwdHashToSave}';`
                 );
               }
 

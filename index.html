@@ -2152,29 +2152,139 @@ Ingenium의 창의와 지혜를 바탕으로
     <!-- ==================================================== -->
     <script>
       // ----------------------------------------------------
-      // 0. Admin Access Control & Security Layer (소유자 전용 수정 잠금)
+      // 0. Admin Access Control & SHA-256 Security Layer (비밀번호 단방향 해시 암호화)
       // ----------------------------------------------------
       const ADMIN_STORAGE_KEY = 'is_admin_mode';
-      const ADMIN_PWD_KEY = 'admin_site_password';
-      const DEFAULT_ADMIN_PWD = 'myhomep77';
+      const ADMIN_PWD_HASH_KEY = 'admin_site_pwd_hash';
+      // 소스 코드에는 평문 비밀번호가 노출되지 않으며, 오직 SHA-256 해시값만 저장됩니다.
+      const DEFAULT_ADMIN_PWD_HASH = '65eeb3ed8a8b679adeefbf867927f91ca4358f6afed804be3d046148c72cb779';
+      // 초기 보조 기본 비밀번호(admin1234, 1234) 해시값
+      const INITIAL_FALLBACK_HASHES = [
+        'ac9689e2272427085e35b9d3e3e8bed88cb3434828b43b86fc0596cad4c6e270', // admin1234
+        '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'  // 1234
+      ];
 
+      // SHA-256 단방향 해시 계산 유틸리티 (UTF-8 완벽 지원)
+      function calculateSha256(ascii) {
+        function rightRotate(value, amount) {
+          return (value >>> amount) | (value << (32 - amount));
+        }
+        var mathPow = Math.pow;
+        var maxWord = mathPow(2, 32);
+        var lengthProperty = 'length';
+        var i, j;
+        var result = '';
+        var words = [];
+        var asciiBitLength = ascii[lengthProperty] * 8;
+        var hash = [];
+        var k = [];
+        var primeCounter = 0;
+
+        var isComposite = {};
+        for (var candidate = 2; primeCounter < 64; candidate++) {
+          if (!isComposite[candidate]) {
+            for (i = 0; i < 313; i += candidate) {
+              isComposite[i] = candidate;
+            }
+            hash[primeCounter] = (mathPow(candidate, .5) * maxWord) | 0;
+            k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+          }
+        }
+
+        ascii += '\x80';
+        while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
+        for (i = 0; i < ascii[lengthProperty]; i++) {
+          j = ascii.charCodeAt(i);
+          if (j >> 8) return '';
+          words[i >> 2] |= j << ((3 - i) % 4) * 8;
+        }
+        words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
+        words[words[lengthProperty]] = (asciiBitLength);
+
+        for (j = 0; j < words[lengthProperty];) {
+          var w = words.slice(j, j += 16);
+          var oldHash = hash;
+          hash = hash.slice(0, 8);
+
+          for (i = 0; i < 64; i++) {
+            var i2 = i + j;
+            var w15 = w[i - 15], w2 = w[i - 2];
+            var a = hash[0], e = hash[4];
+            var temp1 = hash[7]
+              + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+              + ((e & hash[5]) ^ ((~e) & hash[6]))
+              + k[i]
+              + (w[i] = (i < 16) ? w[i] : (
+                  w[i - 16]
+                  + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3))
+                  + w[i - 7]
+                  + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+                ) | 0
+              );
+            var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+              + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+
+            hash = [(temp1 + temp2) | 0].concat(hash);
+            hash[4] = (hash[4] + temp1) | 0;
+          }
+
+          for (i = 0; i < 8; i++) {
+            hash[i] = (hash[i] + oldHash[i]) | 0;
+          }
+        }
+
+        for (i = 0; i < 8; i++) {
+          for (i2 = 3; i2 >= 0; i2--) {
+            var b = (hash[i] >> (i2 * 8)) & 255;
+            result += ((b < 16) ? '0' : '') + b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      function hashPasswordSha256(str) {
+        if (!str) return '';
+        try {
+          var utf8 = unescape(encodeURIComponent(str));
+          return calculateSha256(utf8);
+        } catch (err) {
+          return '';
+        }
+      }
 
       function isPasswordCorrect(entered) {
         if (!entered) return false;
-        const stored = localStorage.getItem(ADMIN_PWD_KEY);
-        if (stored) {
-          return entered === stored;
+        const enteredHash = hashPasswordSha256(entered);
+        
+        // 이전 평문 저장소가 남아있는 경우 자동 해시 마이그레이션
+        let storedHash = localStorage.getItem(ADMIN_PWD_HASH_KEY);
+        if (!storedHash) {
+          const oldPlain = localStorage.getItem('admin_site_password');
+          if (oldPlain) {
+            storedHash = hashPasswordSha256(oldPlain);
+            localStorage.setItem(ADMIN_PWD_HASH_KEY, storedHash);
+            localStorage.removeItem('admin_site_password');
+          }
         }
-        // 초기 기본 비밀번호: myhomep77, admin1234, 1234 유효하게 지원
-        return entered === DEFAULT_ADMIN_PWD || entered === 'admin1234' || entered === '1234';
+
+        if (storedHash) {
+          return enteredHash === storedHash;
+        }
+        return (
+          enteredHash === DEFAULT_ADMIN_PWD_HASH ||
+          INITIAL_FALLBACK_HASHES.includes(enteredHash)
+        );
       }
 
-      function getStoredAdminPassword() {
-        return localStorage.getItem(ADMIN_PWD_KEY) || DEFAULT_ADMIN_PWD;
+      function getStoredAdminPasswordHash() {
+        return localStorage.getItem(ADMIN_PWD_HASH_KEY) || DEFAULT_ADMIN_PWD_HASH;
       }
 
-      function setStoredAdminPassword(pwd) {
-        localStorage.setItem(ADMIN_PWD_KEY, pwd);
+      function setStoredAdminPassword(plainPwd) {
+        const newHash = hashPasswordSha256(plainPwd);
+        localStorage.setItem(ADMIN_PWD_HASH_KEY, newHash);
+        // 기존 평문 저장소 키는 완전히 삭제하여 보안 강화
+        localStorage.removeItem('admin_site_password');
         syncAllDataToDeploy(true);
       }
 
@@ -2401,7 +2511,7 @@ Ingenium의 창의와 지혜를 바탕으로
           careers: typeof careerList !== 'undefined' ? careerList : DEFAULT_CAREERS,
           customSections: typeof customSectionList !== 'undefined' ? customSectionList : DEFAULT_CUSTOM_SECTIONS,
           webapps: typeof webappList !== 'undefined' ? webappList : DEFAULT_WEBAPPS,
-          adminPassword: getStoredAdminPassword()
+          adminPasswordHash: getStoredAdminPasswordHash()
         };
       }
 
@@ -2523,9 +2633,9 @@ Ingenium의 창의와 지혜를 바탕으로
             html = html.replace(/(^[ \t]*const DEFAULT_AVATAR = )['"].*?['"];/m, `$1'${data.profileImage}';`);
           }
 
-          // 7. Admin pwd
-          if (data.adminPassword) {
-            html = html.replace(/(^[ \t]*const DEFAULT_ADMIN_PWD = )['"].*?['"];/m, `$1'${data.adminPassword}';`);
+          // 7. Admin pwd hash (평문이 아닌 SHA-256 해시값만 index.html에 저장)
+          if (data.adminPasswordHash) {
+            html = html.replace(/(^[ \t]*const DEFAULT_ADMIN_PWD_HASH = )['"].*?['"];/m, `$1'${data.adminPasswordHash}';`);
           }
 
           const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
