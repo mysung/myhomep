@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>엔지니enginee 미니 홈페이지</title>
+    <title>엔지니 미니 홈페이지</title>
     <meta name="description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
-    <meta property="og:title" content="엔지니enginee 미니 홈페이지" />
+    <meta property="og:title" content="엔지니 미니 홈페이지" />
     <meta property="og:description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://myhomep.pages.dev/" />
@@ -16,7 +16,7 @@
     <meta property="og:image:height" content="1260" />
     <meta property="og:image:alt" content="엔지니 프로필 대표 이미지" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="엔지니enginee 미니 홈페이지" />
+    <meta name="twitter:title" content="엔지니 미니 홈페이지" />
     <meta name="twitter:description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
     <meta name="twitter:image" content="https://myhomep.pages.dev/profile.jpg?v=20260914" />
     <link rel="image_src" href="https://myhomep.pages.dev/profile.jpg?v=20260914" />
@@ -107,7 +107,7 @@
       // 반드시 body의 인라인 스크립트보다 먼저 실행되어야 함
       (function checkDataVersion() {
         try {
-          var APP_DATA_VERSION = '2026-09-15-v1789460283845';
+          var APP_DATA_VERSION = '2026-09-15-v1789461457262';
           var storedVersion = localStorage.getItem('app_data_version');
           var savedAvatar = localStorage.getItem('profile_image');
           // 이전 버전이거나 profile.jpg, unsplash 등 이전 기본값이 저장되어 있는 경우 public/face.jpg로 강제 초기화
@@ -237,12 +237,12 @@
         <div class="flex items-center gap-2.5 mb-2">
           <!-- Name Display Mode -->
           <div id="name-display-wrap" class="flex items-center gap-2 group cursor-pointer" onclick="handleNameClick()">
-            <h1 id="profile-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">엔지니enginee</h1>
+            <h1 id="profile-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">엔지니</h1>
             <script>
               (function () {
                 try {
                   var savedName = localStorage.getItem('profile_name');
-                  document.getElementById('profile-name').textContent = savedName || '엔지니enginee';
+                  document.getElementById('profile-name').textContent = savedName || '엔지니';
                 } catch (e) {
                   document.getElementById('profile-name').textContent = '엔지니enginee';
                 }
@@ -292,7 +292,7 @@
           <!-- Role Badge & Edit Button -->
           <div class="flex items-center gap-1.5">
             <span id="profile-role" class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-              Creator
+              enginee
             </span>
             <button
               type="button"
@@ -403,7 +403,7 @@ Engineer의 어원인 라틴어 ingenium은
 ‘타고난 재능, 지적 능력, 창의적 재주’를 의미합니다.
 창의적 지혜로 새로운 것을 설계하고 문제를 해결하는 사람이 '엔지니어'입니다.
 
-「엔지니enginee」는 engineer에서 영감을 받은 이름입니다.
+「엔지니(enginee)」는 engineer에서 영감을 받은 이름입니다.
 Ingenium의 창의와 지혜를 바탕으로 
 세상을 널리 이롭게 하는 여성 엔지니어를 추구합니다.</p>
 
@@ -2165,8 +2165,8 @@ Ingenium의 창의와 지혜를 바탕으로
         if (stored) {
           return entered === stored;
         }
-        // 초기 기본 비밀번호: admin1234 와 1234 둘 다 유효하게 지원
-        return entered === 'admin1234' || entered === '1234';
+        // 초기 기본 비밀번호: myhomep77, admin1234, 1234 유효하게 지원
+        return entered === DEFAULT_ADMIN_PWD || entered === 'admin1234' || entered === '1234';
       }
 
       function getStoredAdminPassword() {
@@ -2592,11 +2592,11 @@ Ingenium의 창의와 지혜를 바탕으로
       // 1. Dynamic Author Information & Bio Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_AUTHOR_INFO = {
-  "name": "엔지니enginee",
-  "role": "Creator",
+  "name": "엔지니",
+  "role": "enginee",
   "oneLineBio": "AI 기술을 활용해 유용한 도구를 만드는 크리에이터",
   "aboutTitle": "자기소개",
-  "aboutBio": "반갑습니다!\n\n저는 복잡한 문제를 단순하고 직관적인 웹 경험으로 풀어내는 것을 즐깁니다.\nAI와 현대적 컴퓨팅 기술을 결합하여 일상에 실질적인 가치를 더하는 도구와 경험을 만들어갑니다.\n\nEngineer의 어원인 라틴어 ingenium은\n‘타고난 재능, 지적 능력, 창의적 재주’를 의미합니다.\n창의적 지혜로 새로운 것을 설계하고 문제를 해결하는 사람이 '엔지니어'입니다.\n\n「엔지니enginee」는 engineer에서 영감을 받은 이름입니다.\nIngenium의 창의와 지혜를 바탕으로 \n세상을 널리 이롭게 하는 여성 엔지니어를 추구합니다.",
+  "aboutBio": "반갑습니다!\n\n저는 복잡한 문제를 단순하고 직관적인 웹 경험으로 풀어내는 것을 즐깁니다.\nAI와 현대적 컴퓨팅 기술을 결합하여 일상에 실질적인 가치를 더하는 도구와 경험을 만들어갑니다.\n\nEngineer의 어원인 라틴어 ingenium은\n‘타고난 재능, 지적 능력, 창의적 재주’를 의미합니다.\n창의적 지혜로 새로운 것을 설계하고 문제를 해결하는 사람이 '엔지니어'입니다.\n\n「엔지니(enginee)」는 engineer에서 영감을 받은 이름입니다.\nIngenium의 창의와 지혜를 바탕으로 \n세상을 널리 이롭게 하는 여성 엔지니어를 추구합니다.",
   "skills": [
     "Security",
     "AI",
