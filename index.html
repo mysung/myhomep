@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>엔지니 미니 홈페이지</title>
-    <meta name="description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 엔지니 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
-    <meta property="og:title" content="엔지니 미니 홈페이지" />
-    <meta property="og:description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 엔지니 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
+    <title>엔지니enginee 미니 홈페이지</title>
+    <meta name="description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
+    <meta property="og:title" content="엔지니enginee 미니 홈페이지" />
+    <meta property="og:description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://myhomep.pages.dev/" />
     <meta property="og:image" content="https://myhomep.pages.dev/profile.jpg?v=20260914" />
@@ -16,8 +16,8 @@
     <meta property="og:image:height" content="1260" />
     <meta property="og:image:alt" content="엔지니 프로필 대표 이미지" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="엔지니 미니 홈페이지" />
-    <meta name="twitter:description" content="다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 엔지니 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇" />
+    <meta name="twitter:title" content="엔지니enginee 미니 홈페이지" />
+    <meta name="twitter:description" content="AI 기술을 활용해 유용한 도구를 만드는 크리에이터" />
     <meta name="twitter:image" content="https://myhomep.pages.dev/profile.jpg?v=20260914" />
     <link rel="image_src" href="https://myhomep.pages.dev/profile.jpg?v=20260914" />
 
@@ -30,17 +30,18 @@
           extend: {
             colors: {
               indigo: {
-                DEFAULT: '#4f46e5',
-                50: '#eef2ff',
-                100: '#e0e7ff',
-                200: '#c7d2fe',
-                300: '#a5b4fc',
-                400: '#818cf8',
-                500: '#6366f1',
-                600: '#4f46e5',
-                700: '#4338ca',
-                800: '#3730a3',
-                900: '#312e81',
+                DEFAULT: '#9159c4',
+                50: '#faf7fd',
+                100: '#f3edfa',
+                200: '#e9def6',
+                300: '#d8c4ee',
+                400: '#c09de3',
+                500: '#a777d5',
+                600: '#9159c4',
+                700: '#7b46aa',
+                800: '#683d8c',
+                900: '#553271',
+                950: '#391b50',
               }
             }
           }
@@ -106,7 +107,7 @@
       // 반드시 body의 인라인 스크립트보다 먼저 실행되어야 함
       (function checkDataVersion() {
         try {
-          var APP_DATA_VERSION = '2026-09-15-v1789457123488';
+          var APP_DATA_VERSION = '2026-09-15-v1789460283845';
           var storedVersion = localStorage.getItem('app_data_version');
           var savedAvatar = localStorage.getItem('profile_image');
           // 이전 버전이거나 profile.jpg, unsplash 등 이전 기본값이 저장되어 있는 경우 public/face.jpg로 강제 초기화
@@ -236,15 +237,14 @@
         <div class="flex items-center gap-2.5 mb-2">
           <!-- Name Display Mode -->
           <div id="name-display-wrap" class="flex items-center gap-2 group cursor-pointer" onclick="handleNameClick()">
-            <h1 id="profile-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
-            </h1>
+            <h1 id="profile-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">엔지니enginee</h1>
             <script>
               (function () {
                 try {
                   var savedName = localStorage.getItem('profile_name');
-                  document.getElementById('profile-name').textContent = savedName || '엔지니';
+                  document.getElementById('profile-name').textContent = savedName || '엔지니enginee';
                 } catch (e) {
-                  document.getElementById('profile-name').textContent = '엔지니';
+                  document.getElementById('profile-name').textContent = '엔지니enginee';
                 }
               })();
             </script>
@@ -309,7 +309,7 @@
         <!-- One-line Bio with Quick Edit -->
         <div class="flex items-center justify-center gap-2 max-w-lg mx-auto mb-5 group">
           <p id="profile-bio" class="text-base sm:text-lg text-slate-400 leading-relaxed text-center">
-            AI 기술을 활용해 유용한 도구를 만드는 크리에이터입니다.
+            AI 기술을 활용해 유용한 도구를 만드는 크리에이터
           </p>
           <button
             type="button"
@@ -394,13 +394,41 @@
                 <span>소개 수정</span>
               </button>
             </div>
-            <p id="about-card-bio" class="text-slate-300 leading-relaxed text-sm sm:text-base mb-6 whitespace-pre-line">
-              반갑습니다! 저는 복잡한 문제를 단순하고 직관적인 웹 인터페이스로 풀어내는 것을 즐깁니다. 최신 생성형 AI 모델과 현대적인 프론트엔드 엔지니어링을 결합하여, 일상에 실질적인 가치를 제공하는 편리한 도구와 사용자 경험을 만들어가고 있습니다.
-            </p>
+            <p id="about-card-bio" class="text-slate-300 leading-relaxed text-sm sm:text-base mb-6 whitespace-pre-line">반갑습니다!
+
+저는 복잡한 문제를 단순하고 직관적인 웹 경험으로 풀어내는 것을 즐깁니다.
+AI와 현대적 컴퓨팅 기술을 결합하여 일상에 실질적인 가치를 더하는 도구와 경험을 만들어갑니다.
+
+Engineer의 어원인 라틴어 ingenium은
+‘타고난 재능, 지적 능력, 창의적 재주’를 의미합니다.
+창의적 지혜로 새로운 것을 설계하고 문제를 해결하는 사람이 '엔지니어'입니다.
+
+「엔지니enginee」는 engineer에서 영감을 받은 이름입니다.
+Ingenium의 창의와 지혜를 바탕으로 
+세상을 널리 이롭게 하는 여성 엔지니어를 추구합니다.</p>
 
             <!-- Skill Tags (Dynamically Rendered & Editable) -->
             <div id="about-card-skills" class="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80">
-              <!-- Rendered via JavaScript -->
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>
+                <span>Security</span>
+              </span>
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>
+                <span>AI</span>
+              </span>
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>
+                <span>Full Stack Dev</span>
+              </span>
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>
+                <span>UI/UX Design</span>
+              </span>
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>
+                <span>Workflow Automation</span>
+              </span>
             </div>
           </div>
 
@@ -2128,7 +2156,8 @@
       // ----------------------------------------------------
       const ADMIN_STORAGE_KEY = 'is_admin_mode';
       const ADMIN_PWD_KEY = 'admin_site_password';
-      const DEFAULT_ADMIN_PWD = 'admin1234';
+      const DEFAULT_ADMIN_PWD = 'myhomep77';
+
 
       function isPasswordCorrect(entered) {
         if (!entered) return false;
@@ -2441,18 +2470,36 @@
 
           // 2. Author info & meta
           if (data.authorInfo) {
-            html = html.replace(/const DEFAULT_AUTHOR_INFO = \{[\s\S]*?\};/, `const DEFAULT_AUTHOR_INFO = ${JSON.stringify(data.authorInfo, null, 2)};`);
+            html = html.replace(/(const DEFAULT_AUTHOR_INFO = )\{[\s\S]*?\};/, `$1${JSON.stringify(data.authorInfo, null, 2)};`);
             if (data.authorInfo.name) {
               const safeName = data.authorInfo.name;
               html = html.replace(/<title>.*?<\/title>/, `<title>${safeName} 미니 홈페이지</title>`);
               html = html.replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${safeName} 미니 홈페이지" />`);
               html = html.replace(/<meta name="twitter:title" content=".*?" \/>/, `<meta name="twitter:title" content="${safeName} 미니 홈페이지" />`);
+              html = html.replace(/(<h1 id="profile-name"[^>]*>)[\s\S]*?(<\/h1>)/, `$1${safeName}$2`);
+              html = html.replace(/savedName \|\| '[^']*'/, `savedName || '${safeName}'`);
+            }
+            if (data.authorInfo.role) {
+              html = html.replace(/(<span id="profile-role"[^>]*>)[\s\S]*?(<\/span>)/, `$1\n              ${data.authorInfo.role}\n            $2`);
             }
             if (data.authorInfo.oneLineBio) {
               const safeBio = String(data.authorInfo.oneLineBio).replace(/"/g, '&quot;');
               html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${safeBio}" />`);
               html = html.replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${safeBio}" />`);
               html = html.replace(/<meta name="twitter:description" content=".*?" \/>/, `<meta name="twitter:description" content="${safeBio}" />`);
+              html = html.replace(/(<p id="profile-bio"[^>]*>)[\s\S]*?(<\/p>)/, `$1\n            ${data.authorInfo.oneLineBio}\n          $2`);
+            }
+            if (data.authorInfo.aboutTitle) {
+              html = html.replace(/(<h2 id="about-card-title"[^>]*>)[\s\S]*?(<\/h2>)/, `$1${data.authorInfo.aboutTitle}$2`);
+            }
+            if (data.authorInfo.aboutBio) {
+              html = html.replace(/(<p id="about-card-bio"[^>]*>)[\s\S]*?(<\/p>)/, `$1${data.authorInfo.aboutBio}$2`);
+            }
+            if (data.authorInfo.skills && Array.isArray(data.authorInfo.skills)) {
+              const skillsHtml = data.authorInfo.skills
+                .map(s => `<span class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700 flex items-center gap-1.5 shadow-sm">\n                <i class="fa-solid fa-check text-indigo-400 text-[10px]"></i>\n                <span>${s}</span>\n              </span>`)
+                .join('\n              ');
+              html = html.replace(/(<div id="about-card-skills"[^>]*>)[\s\S]*?(<\/div>)/, `$1\n              ${skillsHtml}\n            $2`);
             }
           }
 
@@ -2473,12 +2520,12 @@
 
           // 6. Avatar
           if (data.profileImage) {
-            html = html.replace(/const DEFAULT_AVATAR = ['"].*?['"];/, `const DEFAULT_AVATAR = '${data.profileImage}';`);
+            html = html.replace(/(^[ \t]*const DEFAULT_AVATAR = )['"].*?['"];/m, `$1'${data.profileImage}';`);
           }
 
           // 7. Admin pwd
           if (data.adminPassword) {
-            html = html.replace(/const DEFAULT_ADMIN_PWD = ['"].*?['"];/, `const DEFAULT_ADMIN_PWD = '${data.adminPassword}';`);
+            html = html.replace(/(^[ \t]*const DEFAULT_ADMIN_PWD = )['"].*?['"];/m, `$1'${data.adminPassword}';`);
           }
 
           const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
@@ -2545,17 +2592,23 @@
       // 1. Dynamic Author Information & Bio Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_AUTHOR_INFO = {
-        name: '엔지니',
-        role: 'Creator',
-        oneLineBio: 'AI 기술을 활용해 유용한 도구를 만드는 크리에이터입니다.',
-        aboutTitle: '자기소개',
-        aboutBio: '반갑습니다! 저는 복잡한 문제를 단순하고 직관적인 웹 인터페이스로 풀어내는 것을 즐깁니다. 최신 생성형 AI 모델과 현대적인 프론트엔드 엔지니어링을 결합하여, 일상에 실질적인 가치를 제공하는 편리한 도구와 사용자 경험을 만들어가고 있습니다.',
-        skills: ['Generative AI', 'Frontend Dev', 'UI/UX Design', 'Workflow Automation'],
-        githubUrl: 'https://github.com',
-        email: 'hong@example.com',
-        linkedinUrl: 'https://linkedin.com',
-        blogUrl: ''
-      };
+  "name": "엔지니enginee",
+  "role": "Creator",
+  "oneLineBio": "AI 기술을 활용해 유용한 도구를 만드는 크리에이터",
+  "aboutTitle": "자기소개",
+  "aboutBio": "반갑습니다!\n\n저는 복잡한 문제를 단순하고 직관적인 웹 경험으로 풀어내는 것을 즐깁니다.\nAI와 현대적 컴퓨팅 기술을 결합하여 일상에 실질적인 가치를 더하는 도구와 경험을 만들어갑니다.\n\nEngineer의 어원인 라틴어 ingenium은\n‘타고난 재능, 지적 능력, 창의적 재주’를 의미합니다.\n창의적 지혜로 새로운 것을 설계하고 문제를 해결하는 사람이 '엔지니어'입니다.\n\n「엔지니enginee」는 engineer에서 영감을 받은 이름입니다.\nIngenium의 창의와 지혜를 바탕으로 \n세상을 널리 이롭게 하는 여성 엔지니어를 추구합니다.",
+  "skills": [
+    "Security",
+    "AI",
+    "Full Stack Dev",
+    "UI/UX Design",
+    "Workflow Automation"
+  ],
+  "githubUrl": "https://github.com",
+  "email": "hong@example.com",
+  "linkedinUrl": "https://linkedin.com",
+  "blogUrl": ""
+};
 
       function loadAuthorInfo() {
         try {
@@ -2846,14 +2899,20 @@
       // 1-1-B. Dynamic Custom Sections Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_CUSTOM_SECTIONS = [
-        {
-          id: 'sec-default-stack',
-          title: '보유 핵심 기술 스택',
-          icon: 'fa-solid fa-code',
-          content: '현대적인 프론트엔드 아키텍처와 생성형 AI 모델의 실시간 API를 결합하여 일상에 유용한 웹 애플리케이션을 신속하게 설계하고 배포합니다.',
-          tags: ['JavaScript / TypeScript', 'React & Tailwind CSS', 'Google Gemini API', 'Cloudflare Pages', 'Python']
-        }
-      ];
+  {
+    "id": "sec-default-stack",
+    "title": "보유 핵심 기술 스택",
+    "icon": "fa-solid fa-code",
+    "content": "현대적 풀스택 아키텍처와 AI 모델의 실시간 API를 결합하여 일상에 유용한 웹 애플리케이션을 신속하게 설계하고 배포합니다.",
+    "tags": [
+      "Python",
+      "JavaScript",
+      "React & Tailwind CSS",
+      "Google Gemini API",
+      "Cloudflare Pages"
+    ]
+  }
+];
 
       function loadCustomSections() {
         try {
@@ -3253,31 +3312,31 @@
       // 1-3. Dynamic Career Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_CAREERS = [
-        {
-          id: 'career-default-1',
-          title: 'AI 솔루션 & 인터랙션 개발 리드',
-          period: '2024 ~ 현재',
-          company: 'AI & Web Architecture',
-          desc: '생성형 AI API와 최신 웹 기술을 결합한 경량형 비즈니스 유틸리티 기획 및 프로덕트 구축',
-          isCurrent: true
-        },
-        {
-          id: 'career-default-2',
-          title: '시니어 보안 엔지니어',
-          period: '2024 ~ 현재',
-          company: 'Security & AI Defense',
-          desc: '사이버 보안 실전 진단 및 AI 보안 솔루션 개발',
-          isCurrent: true
-        },
-        {
-          id: 'career-default-3',
-          title: '컴퓨터공학 교육 & 연구',
-          period: '1993 ~ 2024',
-          company: 'Education & Research Lab',
-          desc: 'OS, LINUX, AI, DS, Haptic VR',
-          isCurrent: false
-        }
-      ];
+  {
+    "id": "career-default-1",
+    "title": "AI 솔루션 & 인터랙션 개발 리드",
+    "period": "2024 ~ 현재",
+    "company": "AI & Web Architecture",
+    "desc": "AI API와 최신 웹 기술을 결합한 비즈니스 유틸리티 기획 및 프로덕트 구축",
+    "isCurrent": true
+  },
+  {
+    "id": "career-default-2",
+    "title": "시니어 보안 엔지니어",
+    "period": "2024 ~ 현재",
+    "company": "Security & AI Defense",
+    "desc": "사이버 보안 실전 진단 및 AI 보안 솔루션 개발",
+    "isCurrent": true
+  },
+  {
+    "id": "career-default-3",
+    "title": "컴퓨터공학 교육 & 연구",
+    "period": "1993 ~ 2024",
+    "company": "Education & Research Lab",
+    "desc": "OS, LINUX, AI, DS, Haptic VR",
+    "isCurrent": false
+  }
+];
 
       function loadCareers() {
         try {
@@ -3607,55 +3666,70 @@
       // 2-2. Dynamic Webapp Gallery & Title Management (Local Storage & CRUD)
       // ----------------------------------------------------
       const DEFAULT_WEBAPPS = [
-        {
-          id: 'webapp-eatzy-v3',
-          title: '오늘 뭐 먹지? v3',
-          badge: 'Live v3.0 배포',
-          badgeColor: 'emerald',
-          icon: 'fa-solid fa-utensils',
-          desc: 'Google AI Studio로 기획·개발하여 Cloudflare Pages에 정식 배포된 스마트 메뉴 추천 웹앱입니다.\n2단계 맞춤 취향 질문(매콤/담백, 밥/면·빵)과 실제 메뉴 사진, 꿀팁, 근처 맛집 찾기를 지원합니다.',
-          url: 'https://eatzy.pages.dev/',
-          tags: ['GoogleAIStudio', 'CloudflarePages', 'eatzy.pages.dev', '음식추천'],
-          isFeatured: true,
-          isLive: true
-        },
-        {
-          id: 'webapp-ai-summary',
-          title: 'AI 스마트 텍스트 요약기',
-          badge: '개발 중 (80%)',
-          badgeColor: 'emerald',
-          icon: 'fa-solid fa-wand-magic-sparkles',
-          desc: '긴 블로그 아티클이나 보고서를 핵심 3줄 불릿포인트로 신속하게 요약해주는 미니 웹앱.',
-          url: '',
-          tags: ['AI', 'NLP', 'Utility'],
-          isFeatured: false,
-          isLive: false
-        },
-        {
-          id: 'webapp-pomodoro',
-          title: '포모도로 & 미니 메모장',
-          badge: '기획 완료',
-          badgeColor: 'indigo',
-          icon: 'fa-solid fa-clock-rotate-left',
-          desc: '25분 집중 인터벌과 즉시 휘발/저장 가능한 퀵 마크다운 노트를 지원하는 생산성 타이머.',
-          url: '',
-          tags: ['Timer', 'Productivity'],
-          isFeatured: false,
-          isLive: false
-        },
-        {
-          id: 'webapp-prompt-optimizer',
-          title: '프롬프트 옵티마이저',
-          badge: '프로토타입',
-          badgeColor: 'amber',
-          icon: 'fa-solid fa-sliders',
-          desc: '모호한 요구사항을 입력하면 고품질 결과물을 유도하는 정교한 시스템 프롬프트로 변환.',
-          url: '',
-          tags: ['Prompt', 'LLM'],
-          isFeatured: false,
-          isLive: false
-        }
-      ];
+  {
+    "id": "webapp-eatzy-v3",
+    "title": "오늘 뭐 먹지? 3.0",
+    "badge": "Live v3.0 배포",
+    "badgeColor": "emerald",
+    "icon": "fa-solid fa-utensils",
+    "desc": "Google AI Studio로 기획·개발하여 Cloudflare Pages에 정식 배포된 스마트 메뉴 추천 웹앱입니다.\n2단계 맞춤 취향 질문(매콤/담백, 밥/면·빵)과 실제 메뉴 사진, 꿀팁, 근처 맛집 찾기를 지원합니다.",
+    "url": "https://eatzy.pages.dev/",
+    "tags": [
+      "GoogleAIStudio",
+      "CloudflarePages",
+      "eatzy.pages.dev",
+      "음식추천"
+    ],
+    "isFeatured": true,
+    "isLive": true
+  },
+  {
+    "id": "webapp-ai-summary",
+    "title": "AI 스마트 텍스트 요약기",
+    "badge": "개발 중 (80%)",
+    "badgeColor": "emerald",
+    "icon": "fa-solid fa-wand-magic-sparkles",
+    "desc": "긴 블로그 아티클이나 보고서를 핵심 3줄 불릿포인트로 신속하게 요약해주는 미니 웹앱.",
+    "url": "",
+    "tags": [
+      "AI",
+      "NLP",
+      "Utility"
+    ],
+    "isFeatured": false,
+    "isLive": false
+  },
+  {
+    "id": "webapp-pomodoro",
+    "title": "포모도로 & 미니 메모장",
+    "badge": "기획 완료",
+    "badgeColor": "indigo",
+    "icon": "fa-solid fa-clock-rotate-left",
+    "desc": "25분 집중 인터벌과 즉시 휘발/저장 가능한 퀵 마크다운 노트를 지원하는 생산성 타이머.",
+    "url": "",
+    "tags": [
+      "Timer",
+      "Productivity"
+    ],
+    "isFeatured": false,
+    "isLive": false
+  },
+  {
+    "id": "webapp-prompt-optimizer",
+    "title": "프롬프트 옵티마이저",
+    "badge": "프로토타입",
+    "badgeColor": "amber",
+    "icon": "fa-solid fa-sliders",
+    "desc": "모호한 요구사항을 입력하면 고품질 결과물을 유도하는 정교한 시스템 프롬프트로 변환.",
+    "url": "",
+    "tags": [
+      "Prompt",
+      "LLM"
+    ],
+    "isFeatured": false,
+    "isLive": false
+  }
+];
 
       function loadWebapps() {
         try {

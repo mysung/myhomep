@@ -1,8 +1,8 @@
 {
   "name": "엔지니 미니 홈페이지",
-  "description": "다크 모드와 인디고 포인트를 적용한 단일 HTML 기반의 엔지니 미니 홈페이지, 오늘 뭐 먹지 v3 웹앱 및 AI 비서 챗봇",
+  "description": "AI 기술을 활용해 유용한 도구를 만드는 크리에이터입니다.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
-
-
