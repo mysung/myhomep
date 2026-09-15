@@ -106,7 +106,7 @@
       // 반드시 body의 인라인 스크립트보다 먼저 실행되어야 함
       (function checkDataVersion() {
         try {
-          var APP_DATA_VERSION = '2026-09-14-v10';
+          var APP_DATA_VERSION = '2026-09-15-v1789457123488';
           var storedVersion = localStorage.getItem('app_data_version');
           var savedAvatar = localStorage.getItem('profile_image');
           // 이전 버전이거나 profile.jpg, unsplash 등 이전 기본값이 저장되어 있는 경우 public/face.jpg로 강제 초기화
@@ -142,29 +142,40 @@
       <!-- Admin Active Sticky Status Bar (Shown ONLY when Owner is logged in) -->
       <div
         id="admin-banner"
-        class="hidden sticky top-4 z-40 mx-auto max-w-2xl w-full px-4 py-2.5 rounded-2xl bg-indigo-950/95 border border-indigo-500/60 shadow-xl shadow-indigo-950/80 backdrop-blur-md items-center justify-between gap-3 text-xs sm:text-sm text-indigo-100"
+        class="hidden sticky top-4 z-40 mx-auto max-w-3xl w-full px-4 py-2.5 rounded-2xl bg-indigo-950/95 border border-indigo-500/60 shadow-xl shadow-indigo-950/80 backdrop-blur-md items-center justify-between gap-2.5 text-xs sm:text-sm text-indigo-100"
       >
         <div class="flex items-center gap-2 font-medium">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <i class="fa-solid fa-lock-open text-indigo-300"></i>
-          <span><strong>관리자 모드 활성화됨</strong> (모든 항목 수정 가능)</span>
+          <span class="hidden sm:inline"><strong>관리자 모드</strong> (편집 가능)</span>
+          <span class="sm:hidden"><strong>관리자</strong></span>
         </div>
         <div class="flex items-center gap-2">
           <button
             type="button"
+            onclick="syncAllDataToDeploy(false)"
+            id="admin-banner-save-btn"
+            class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-950/50 flex items-center gap-1.5 cursor-pointer border border-emerald-400/40"
+            title="현재 수정한 모든 내용을 소스 파일(index.html)에 즉시 영구 저장하여 배포 시 그대로 반영되도록 합니다"
+          >
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>배포(index.html)에 영구 저장</span>
+          </button>
+          <button
+            type="button"
             onclick="openAdminModal('export')"
-            class="px-2.5 py-1 rounded-lg bg-indigo-800/80 hover:bg-indigo-700 text-white font-medium transition-colors cursor-pointer border border-indigo-600/50"
-            title="수정한 데이터 백업 및 영구 반영"
+            class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg bg-indigo-800/80 hover:bg-indigo-700 text-white font-medium transition-colors cursor-pointer border border-indigo-600/50"
+            title="수정한 데이터 백업 및 index.html 다운로드"
           >
             <i class="fa-solid fa-cloud-arrow-down mr-1"></i> 데이터 백업
           </button>
           <button
             type="button"
             onclick="logoutAdmin()"
-            class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 font-medium transition-colors cursor-pointer border border-slate-700"
+            class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-900 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 font-medium transition-colors cursor-pointer border border-slate-700"
             title="방문자 모드로 전환 (수정 버튼 즉시 숨김)"
           >
-            <i class="fa-solid fa-lock mr-1"></i> 방문자 모드로 잠금
+            <i class="fa-solid fa-lock mr-1"></i> 잠금
           </button>
         </div>
       </div>
@@ -1058,7 +1069,20 @@
               onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='/face.jpg';}else if(this.src!=='https://myhomep.pages.dev/face.jpg'){this.src='https://myhomep.pages.dev/face.jpg';}"
             />
           </div>
-          <span class="text-[11px] text-slate-400 font-medium">현재 프로필 사진 미리보기</span>
+          <span class="text-[11px] text-slate-400 font-medium">현재 상단 원형 프로필 사진 미리보기</span>
+        </div>
+
+        <!-- Explanation Note: 대문 사진 vs 프로필 사진 -->
+        <div class="p-3 rounded-xl bg-slate-950/80 border border-indigo-500/30 text-[11.5px] text-slate-300 leading-relaxed">
+          <div class="font-semibold text-indigo-300 flex items-center gap-1.5 mb-1">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>대문 사진 vs 프로필 사진 구분</span>
+          </div>
+          <p class="text-slate-400">
+            • <strong>프로필 사진 (얼굴):</strong> <code class="text-indigo-300 bg-indigo-950/60 px-1 py-0.5 rounded">public/face.jpg</code> — 홈페이지 상단 원형 아바타에 노출됩니다.<br>
+            • <strong>대문 사진 (SNS 링크 공유):</strong> <code class="text-indigo-300 bg-indigo-950/60 px-1 py-0.5 rounded">public/profile.jpg</code> — 카카오톡이나 SNS에 홈페이지 링크를 공유할 때 카드 미리보기(OpenGraph)로 나타납니다.<br>
+            두 사진은 각각 서로 다른 사진으로 자유롭게 설정 및 사용하실 수 있습니다.
+          </p>
         </div>
 
         <!-- 1. Local File Upload (Click or Drag & Drop) -->
@@ -2021,39 +2045,75 @@
             </form>
           </div>
 
-          <!-- SubTab 2: 데이터 영구 반영 & 백업 -->
-          <div id="admin-subtab-export" class="hidden flex-col gap-3 text-xs">
-            <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 leading-relaxed">
-              <strong class="text-white block mb-1">💡 배포 시 모든 방문자에게 내 수정사항 영구 표시하기</strong>
-              현재 브라우저에서 수정한 프로필, 경력, 웹앱 데이터를 아래 버튼으로 복사하여, AI 빌더에게 <em>"이 데이터로 index.html 기본값을 고정해줘"</em>라고 말씀하시면 배포 원본 코드에 영구 고정되어 모든 방문자에게 그대로 보이게 됩니다.
+          <!-- SubTab 2: 데이터 영구 반영 & 배포 저장 -->
+          <div id="admin-subtab-export" class="hidden flex-col gap-3.5 text-xs">
+            <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-100 leading-relaxed">
+              <div class="flex items-center gap-2 mb-1 text-emerald-300 font-bold text-sm">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span>수정사항 소스 코드(index.html) 및 배포 영구 반영</span>
+              </div>
+              <p class="text-[11.5px] text-emerald-200/90 mb-2">
+                관리자 모드에서 변경하신 프로필, 소개글, 사진, 경력 이력, 웹앱 목록은 브라우저에 임시 저장되는 동시에 <strong>[💾 index.html 소스 파일에 즉시 영구 저장]</strong> 버튼을 통해 원본 소스 파일에 직접 반영됩니다.
+              </p>
+              <p class="text-[11px] text-slate-300">
+                • <strong>AI Studio 환경:</strong> 버튼 한 번으로 index.html이 즉시 업데이트되며, 배포(Deploy) 시 수정 내용이 그대로 적용됩니다.<br>
+                • <strong>외부 정적 호스팅(Cloudflare Pages 등):</strong> [배포용 index.html 파일 다운로드]로 최신 파일을 내려받아 저장소에 업로드할 수 있습니다.
+              </p>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2">
+            <!-- Primary Action: Save to index.html -->
+            <button
+              type="button"
+              id="admin-modal-save-btn"
+              onclick="syncAllDataToDeploy(false)"
+              class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-950/60 border border-emerald-400/50 text-xs sm:text-sm"
+            >
+              <i class="fa-solid fa-floppy-disk text-base"></i>
+              <span>💾 index.html 소스 파일에 즉시 영구 저장 (배포 반영)</span>
+            </button>
+
+            <!-- Secondary Action: Download index.html -->
+            <button
+              type="button"
+              onclick="downloadUpdatedIndexHtml()"
+              class="w-full py-2.5 px-3 rounded-xl bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 hover:text-white font-semibold border border-indigo-500/40 flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <i class="fa-solid fa-file-arrow-down text-indigo-400"></i>
+              <span>📥 배포용 index.html 파일 다운로드 (Cloudflare Pages / GitHub 업로드용)</span>
+            </button>
+
+            <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-800">
               <button
                 type="button"
                 onclick="copyAllProfileData()"
-                class="flex-1 py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer border border-slate-700"
               >
-                <i class="fa-solid fa-copy"></i>
-                <span>설정 JSON 클립보드 복사</span>
+                <i class="fa-solid fa-copy text-slate-400"></i>
+                <span>설정 JSON 복사</span>
               </button>
               <button
                 type="button"
                 onclick="downloadAllProfileData()"
-                class="flex-1 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium border border-slate-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
-                <i class="fa-solid fa-download"></i>
-                <span>JSON 파일 다운로드</span>
+                <i class="fa-solid fa-download text-slate-400"></i>
+                <span>JSON 백업 다운로드</span>
               </button>
             </div>
 
-            <textarea
-              id="admin-export-textarea"
-              readonly
-              rows="6"
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-[11px] font-mono text-slate-400 focus:outline-none resize-none"
-              placeholder="전체 설정 데이터 미리보기..."
-            ></textarea>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-semibold text-slate-400">현재 데이터 JSON 미리보기</span>
+                <span class="text-[10px] text-slate-500 font-mono">Realtime State</span>
+              </div>
+              <textarea
+                id="admin-export-textarea"
+                readonly
+                rows="5"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-[11px] font-mono text-slate-400 focus:outline-none resize-none"
+                placeholder="전체 설정 데이터 미리보기..."
+              ></textarea>
+            </div>
           </div>
         </div>
       </div>
@@ -2086,6 +2146,7 @@
 
       function setStoredAdminPassword(pwd) {
         localStorage.setItem(ADMIN_PWD_KEY, pwd);
+        syncAllDataToDeploy(true);
       }
 
       function checkInitialAdminState() {
@@ -2310,8 +2371,130 @@
           profileImage: typeof currentProfileAvatar !== 'undefined' ? currentProfileAvatar : DEFAULT_AVATAR,
           careers: typeof careerList !== 'undefined' ? careerList : DEFAULT_CAREERS,
           customSections: typeof customSectionList !== 'undefined' ? customSectionList : DEFAULT_CUSTOM_SECTIONS,
-          webapps: typeof webappList !== 'undefined' ? webappList : DEFAULT_WEBAPPS
+          webapps: typeof webappList !== 'undefined' ? webappList : DEFAULT_WEBAPPS,
+          adminPassword: getStoredAdminPassword()
         };
+      }
+
+      let isSyncingToServer = false;
+
+      async function syncAllDataToDeploy(silent) {
+        if (isSyncingToServer) return;
+        isSyncingToServer = true;
+        const bannerBtn = document.getElementById('admin-banner-save-btn');
+        const modalBtn = document.getElementById('admin-modal-save-btn');
+        const origBannerHTML = bannerBtn ? bannerBtn.innerHTML : '';
+        const origModalHTML = modalBtn ? modalBtn.innerHTML : '';
+
+        if (!silent) {
+          if (bannerBtn) bannerBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+          if (modalBtn) modalBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> index.html 반영 중...';
+        }
+
+        const payload = getAllProfileData();
+
+        try {
+          const res = await fetch('/api/save-content', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (!silent) {
+              showToast('🎉 index.html 코드에 영구 저장 완료! 이제 배포하시면 수정 내용이 그대로 적용됩니다.', 4500);
+            }
+            refreshAdminExportPreview();
+          } else {
+            throw new Error('Server returned ' + res.status);
+          }
+        } catch (err) {
+          console.warn('API save-content endpoint unavailable (static hosting or offline):', err);
+          if (!silent) {
+            showToast('ℹ️ 정적 호스팅(Cloudflare Pages) 환경입니다. 배포용 index.html 파일 다운로드를 준비합니다.', 4000);
+            downloadUpdatedIndexHtml();
+          }
+        } finally {
+          isSyncingToServer = false;
+          if (bannerBtn) bannerBtn.innerHTML = origBannerHTML;
+          if (modalBtn) modalBtn.innerHTML = origModalHTML;
+        }
+      }
+
+      async function downloadUpdatedIndexHtml() {
+        showToast('배포용 index.html 파일 생성 중...', 2000);
+        try {
+          let html = '';
+          const res = await fetch(window.location.href);
+          if (res.ok) {
+            html = await res.text();
+          } else {
+            html = document.documentElement.outerHTML;
+          }
+
+          const data = getAllProfileData();
+          const newVersion = '2026-09-15-v' + Date.now();
+
+          // 1. Version
+          html = html.replace(/var APP_DATA_VERSION = ['"].*?['"];/, `var APP_DATA_VERSION = '${newVersion}';`);
+
+          // 2. Author info & meta
+          if (data.authorInfo) {
+            html = html.replace(/const DEFAULT_AUTHOR_INFO = \{[\s\S]*?\};/, `const DEFAULT_AUTHOR_INFO = ${JSON.stringify(data.authorInfo, null, 2)};`);
+            if (data.authorInfo.name) {
+              const safeName = data.authorInfo.name;
+              html = html.replace(/<title>.*?<\/title>/, `<title>${safeName} 미니 홈페이지</title>`);
+              html = html.replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${safeName} 미니 홈페이지" />`);
+              html = html.replace(/<meta name="twitter:title" content=".*?" \/>/, `<meta name="twitter:title" content="${safeName} 미니 홈페이지" />`);
+            }
+            if (data.authorInfo.oneLineBio) {
+              const safeBio = String(data.authorInfo.oneLineBio).replace(/"/g, '&quot;');
+              html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${safeBio}" />`);
+              html = html.replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${safeBio}" />`);
+              html = html.replace(/<meta name="twitter:description" content=".*?" \/>/, `<meta name="twitter:description" content="${safeBio}" />`);
+            }
+          }
+
+          // 3. Careers
+          if (data.careers && Array.isArray(data.careers)) {
+            html = html.replace(/const DEFAULT_CAREERS = \[[\s\S]*?\];/, `const DEFAULT_CAREERS = ${JSON.stringify(data.careers, null, 2)};`);
+          }
+
+          // 4. Custom sections
+          if (data.customSections && Array.isArray(data.customSections)) {
+            html = html.replace(/const DEFAULT_CUSTOM_SECTIONS = \[[\s\S]*?\];/, `const DEFAULT_CUSTOM_SECTIONS = ${JSON.stringify(data.customSections, null, 2)};`);
+          }
+
+          // 5. Webapps
+          if (data.webapps && Array.isArray(data.webapps)) {
+            html = html.replace(/const DEFAULT_WEBAPPS = \[[\s\S]*?\];/, `const DEFAULT_WEBAPPS = ${JSON.stringify(data.webapps, null, 2)};`);
+          }
+
+          // 6. Avatar
+          if (data.profileImage) {
+            html = html.replace(/const DEFAULT_AVATAR = ['"].*?['"];/, `const DEFAULT_AVATAR = '${data.profileImage}';`);
+          }
+
+          // 7. Admin pwd
+          if (data.adminPassword) {
+            html = html.replace(/const DEFAULT_ADMIN_PWD = ['"].*?['"];/, `const DEFAULT_ADMIN_PWD = '${data.adminPassword}';`);
+          }
+
+          const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'index.html';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('✅ 배포용 index.html 파일이 다운로드되었습니다! 이 파일을 배포 저장소에 업로드하시면 됩니다.', 5000);
+        } catch (e) {
+          console.error('Failed to generate index.html download', e);
+          showToast('index.html 다운로드 생성 중 오류가 발생했습니다.', 3000);
+        }
       }
 
       function refreshAdminExportPreview() {
@@ -2460,6 +2643,7 @@
         }
         updateProfileNameInUI(authorInfo.name);
         renderAuthorInfoInUI();
+        syncAllDataToDeploy(true);
       }
 
       function renderAuthorInfoInUI() {
@@ -2694,6 +2878,7 @@
           console.warn('Failed to save profile_custom_sections', e);
         }
         renderCustomSections();
+        syncAllDataToDeploy(true);
       }
 
       function renderCustomSections() {
@@ -2949,6 +3134,7 @@
         updateProfileAvatarInUI(imageDataUrl);
         showToast('프로필 사진이 성공적으로 변경되었습니다! 📸');
         closeAvatarModal();
+        syncAllDataToDeploy(true);
       }
 
       function handleAvatarFileSelect(e) {
@@ -3118,6 +3304,7 @@
           console.warn('localStorage saving error', e);
         }
         renderCareerTimeline();
+        syncAllDataToDeploy(true);
       }
 
       function renderCareerTimeline() {
@@ -3496,6 +3683,7 @@
         }
         renderWebapps();
         syncFoodAppTitle();
+        syncAllDataToDeploy(true);
       }
 
       function getFoodAppTitle() {
